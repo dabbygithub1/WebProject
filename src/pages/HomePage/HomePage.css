@@ -1,0 +1,9 @@
+.home-page {
+  width: 100%;
+  background-color: var(--color-white);
+  overflow-x: hidden;
+}
+
+main {
+  width: 100%;
+}
