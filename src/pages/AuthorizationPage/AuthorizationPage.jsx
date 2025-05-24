@@ -1,7 +1,9 @@
 import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import Header from 'C:/SiteProject/calcora/src/components/Header/Header';
-import Footer from 'C:/SiteProject/calcora/src/components/Footer/Footer';
+import { signInWithEmailAndPassword } from 'firebase/auth';
+import { auth } from '../../firebase'; // путь может отличаться, если firebase.js находится в src/
+import Header from 'C:/ProjectWeb/calcora/src/components/Header/Header';
+import Footer from 'C:/ProjectWeb/calcora/src/components/Footer/Footer';
 import './AuthorizationPage.css';
 
 const AuthorizationPage = () => {
@@ -24,27 +26,37 @@ const AuthorizationPage = () => {
 
   const validateForm = () => {
     const newErrors = {};
-    
+
     if (!formData.email.trim()) {
       newErrors.email = 'Email обязателен';
     } else if (!/\S+@\S+\.\S+/.test(formData.email)) {
       newErrors.email = 'Неверный формат email';
     }
-    
+
     if (!formData.password) {
       newErrors.password = 'Пароль обязателен';
     }
-    
+
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    if (validateForm()) {
+    if (!validateForm()) return;
 
-        console.log('Form submitted:', formData);
-      navigate('/');
+    try {
+      const userCredential = await signInWithEmailAndPassword(
+        auth,
+        formData.email,
+        formData.password
+      );
+      const user = userCredential.user;
+      console.log('Пользователь авторизован:', user);
+      navigate('/professions'); // перенаправление на главную страницу или другой маршрут
+    } catch (error) {
+      console.error('Ошибка авторизации:', error.message);
+      setErrors(prev => ({ ...prev, firebase: error.message }));
     }
   };
 
@@ -113,6 +125,8 @@ const AuthorizationPage = () => {
                 Забыли пароль?
               </Link>
             </div>
+
+            {errors.firebase && <div className="error-message">{errors.firebase}</div>}
 
             <button type="submit" className="login-button">
               Войти

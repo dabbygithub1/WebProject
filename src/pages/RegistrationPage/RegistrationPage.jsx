@@ -1,7 +1,9 @@
 import { useState } from 'react';
-import { Link } from 'react-router-dom';
-import Header from 'C:/SiteProject/calcora/src/components/Header/Header';
-import Footer from 'C:/SiteProject/calcora/src/components/Footer/Footer';
+import { Link, useNavigate } from 'react-router-dom';
+import { createUserWithEmailAndPassword } from 'firebase/auth';
+import { auth } from '../../firebase';
+import Header from 'C:/ProjectWeb/calcora/src/components/Header/Header';
+import Footer from 'C:/ProjectWeb/calcora/src/components/Footer/Footer';
 import './RegistrationPage.css';
 
 const RegistrationPage = () => {
@@ -16,45 +18,44 @@ const RegistrationPage = () => {
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [errors, setErrors] = useState({});
+  const navigate = useNavigate();
 
   const validatePassword = (password) => {
-    const requirements = {
+    return {
       minLength: password.length >= 8,
       hasCase: /[a-z]/.test(password) && /[A-Z]/.test(password),
       hasNumber: /\d/.test(password)
     };
-
-    return requirements;
   };
 
   const validateForm = () => {
     const newErrors = {};
-    
+
     if (!formData.name.trim()) {
       newErrors.name = 'Имя обязательно';
     }
-    
+
     if (!formData.email.trim()) {
       newErrors.email = 'Email обязателен';
     } else if (!/\S+@\S+\.\S+/.test(formData.email)) {
       newErrors.email = 'Неверный формат email';
     }
-    
+
     const passwordRequirements = validatePassword(formData.password);
     if (!formData.password) {
       newErrors.password = 'Пароль обязателен';
     } else if (!passwordRequirements.minLength || !passwordRequirements.hasCase || !passwordRequirements.hasNumber) {
       newErrors.password = 'Пароль не соответствует требованиям';
     }
-    
+
     if (formData.password !== formData.confirmPassword) {
       newErrors.confirmPassword = 'Пароли не совпадают';
     }
-    
+
     if (!formData.agreeToTerms) {
       newErrors.agreeToTerms = 'Необходимо согласие с условиями';
     }
-    
+
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
   };
@@ -67,10 +68,22 @@ const RegistrationPage = () => {
     }));
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    if (validateForm()) {
-      console.log('Form submitted:', formData);
+    if (!validateForm()) return;
+
+    try {
+      const userCredential = await createUserWithEmailAndPassword(
+        auth,
+        formData.email,
+        formData.password
+      );
+      const user = userCredential.user;
+      console.log("Пользователь зарегистрирован:", user);
+      navigate('/dashboard'); // перенаправление после регистрации
+    } catch (error) {
+      console.error("Ошибка регистрации:", error.message);
+      setErrors(prev => ({ ...prev, firebase: error.message }));
     }
   };
 
@@ -85,7 +98,7 @@ const RegistrationPage = () => {
           <p className="registration-subtitle">
             Уже есть аккаунт? <Link to="/login" className="login-link">Войдите</Link>
           </p>
-          
+
           <form onSubmit={handleSubmit} className="registration-form">
             <div className="form-group">
               <label htmlFor="name">Имя</label>
@@ -132,9 +145,9 @@ const RegistrationPage = () => {
                   className="toggle-password"
                   onClick={() => setShowPassword(!showPassword)}
                 >
-                  <img 
-                    src="/assets/icons/glazok.svg" 
-                    alt={showPassword ? 'Скрыть пароль' : 'Показать пароль'} 
+                  <img
+                    src="/assets/icons/glazok.svg"
+                    alt={showPassword ? 'Скрыть пароль' : 'Показать пароль'}
                   />
                 </button>
               </div>
@@ -169,9 +182,9 @@ const RegistrationPage = () => {
                   className="toggle-password"
                   onClick={() => setShowConfirmPassword(!showConfirmPassword)}
                 >
-                  <img 
-                    src="/assets/icons/glazok.svg" 
-                    alt={showConfirmPassword ? 'Скрыть пароль' : 'Показать пароль'} 
+                  <img
+                    src="/assets/icons/glazok.svg"
+                    alt={showConfirmPassword ? 'Скрыть пароль' : 'Показать пароль'}
                   />
                 </button>
               </div>
@@ -193,6 +206,8 @@ const RegistrationPage = () => {
               </label>
               {errors.agreeToTerms && <span className="error-message">{errors.agreeToTerms}</span>}
             </div>
+
+            {errors.firebase && <div className="error-message">{errors.firebase}</div>}
 
             <button type="submit" className="register-button">
               Зарегистрироваться
