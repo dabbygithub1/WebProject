@@ -1,0 +1,17 @@
+.app-container {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+.main-content {
+  flex-grow: 1;
+  background-color: #f9fafb;
+  padding-top: 5rem; /* Space for fixed header */
+}
+
+@media (min-width: 640px) {
+  .main-content {
+    padding-top: 5.5rem;
+  }
+}
