@@ -80,7 +80,8 @@ const RegistrationPage = () => {
       );
       const user = userCredential.user;
       console.log("Пользователь зарегистрирован:", user);
-      navigate('/dashboard'); // перенаправление после регистрации
+      localStorage.setItem('user', JSON.stringify(user));
+      navigate('/profile'); // перенаправление после регистрации
     } catch (error) {
       console.error("Ошибка регистрации:", error.message);
       setErrors(prev => ({ ...prev, firebase: error.message }));

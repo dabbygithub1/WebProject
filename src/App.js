@@ -4,6 +4,7 @@ import RegistrationPage from './pages/RegistrationPage/RegistrationPage';
 import AuthorizationPage from './pages/AuthorizationPage/AuthorizationPage';
 import ProfessionsPage from './pages/ProfessionsPage/ProfessionsPage';
 import CalculatorPage from './pages/CalculatorPage/CalculatorPage';
+import ProfilePage from './pages/ProfilePage/ProfilePage';
 
 import './App.css';
 
@@ -14,6 +15,7 @@ function App() {
         <Route path="/" element={<HomePage />} />
         <Route path="/register" element={<RegistrationPage />} />
         <Route path="/login" element={<AuthorizationPage />} />
+        <Route path="/profile" element={<ProfilePage />} />
         <Route path="/professions" element={<ProfessionsPage />} />
         <Route path="/calculator" element={<CalculatorPage />} />
       </Routes>

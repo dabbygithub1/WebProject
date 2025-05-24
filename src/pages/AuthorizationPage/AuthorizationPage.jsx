@@ -53,7 +53,8 @@ const AuthorizationPage = () => {
       );
       const user = userCredential.user;
       console.log('Пользователь авторизован:', user);
-      navigate('/professions'); // перенаправление 
+      localStorage.setItem('user', JSON.stringify(user));
+      navigate('/profile'); // перенаправление 
     } catch (error) {
       console.error('Ошибка авторизации:', error.message);
       setErrors(prev => ({ ...prev, firebase: error.message }));
