@@ -2,8 +2,8 @@ import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { createUserWithEmailAndPassword } from 'firebase/auth';
 import { auth } from '../../firebase';
-import Header from 'C:/ProjectWeb/calcora/src/components/Header/Header';
-import Footer from 'C:/ProjectWeb/calcora/src/components/Footer/Footer';
+import Header from 'C:/SiteProject/calcora/src/components/Header/Header';
+import Footer from 'C:/SiteProject/calcora/src/components/Footer/Footer';
 import './RegistrationPage.css';
 
 const RegistrationPage = () => {

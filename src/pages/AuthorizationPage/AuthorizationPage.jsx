@@ -1,9 +1,9 @@
 import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { signInWithEmailAndPassword } from 'firebase/auth';
-import { auth } from '../../firebase'; // путь может отличаться, если firebase.js находится в src/
-import Header from 'C:/ProjectWeb/calcora/src/components/Header/Header';
-import Footer from 'C:/ProjectWeb/calcora/src/components/Footer/Footer';
+import { auth } from '../../firebase';
+import Header from 'C:/SiteProject/calcora/src/components/Header/Header';
+import Footer from 'C:/SiteProject/calcora/src/components/Footer/Footer';
 import './AuthorizationPage.css';
 
 const AuthorizationPage = () => {
@@ -53,7 +53,7 @@ const AuthorizationPage = () => {
       );
       const user = userCredential.user;
       console.log('Пользователь авторизован:', user);
-      navigate('/professions'); // перенаправление на главную страницу или другой маршрут
+      navigate('/professions'); // перенаправление 
     } catch (error) {
       console.error('Ошибка авторизации:', error.message);
       setErrors(prev => ({ ...prev, firebase: error.message }));
