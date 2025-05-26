@@ -54,8 +54,10 @@
   color: var(--color-primary);
 }
 
-.contact-link svg {
+.contact-link svg,
+.contact-link img {
   margin-right: 8px;
+  
 }
 
 .footer-bottom {
