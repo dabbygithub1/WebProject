@@ -15,6 +15,12 @@ const Security = () => {
       ...prev,
       [name]: value
     }));
+    if (errors[name]) {
+      setErrors(prev => ({ ...prev, [name]: '' }));
+    }
+    if (name === 'newPassword' && errors.confirmPassword) {
+      setErrors(prev => ({ ...prev, confirmPassword: '' }));
+    }
   };
 
   const validateForm = () => {
@@ -30,7 +36,9 @@ const Security = () => {
       newErrors.newPassword = 'Пароль должен быть не менее 8 символов';
     }
     
-    if (passwordData.newPassword !== passwordData.confirmPassword) {
+    if (!passwordData.confirmPassword) {
+      newErrors.confirmPassword = 'Подтвердите новый пароль';
+    } else if (passwordData.newPassword !== passwordData.confirmPassword) {
       newErrors.confirmPassword = 'Пароли не совпадают';
     }
     
@@ -41,7 +49,6 @@ const Security = () => {
   const handleSubmit = (e) => {
     e.preventDefault();
     if (validateForm()) {
-      
       console.log('Changing password:', passwordData);
       setIsChangingPassword(false);
       setPasswordData({
@@ -49,6 +56,7 @@ const Security = () => {
         newPassword: '',
         confirmPassword: ''
       });
+      setErrors({});
     }
   };
 
@@ -64,18 +72,25 @@ const Security = () => {
             </div>
             <button 
               className="change-button"
-              onClick={() => setIsChangingPassword(!isChangingPassword)}
+              onClick={() => {
+                setIsChangingPassword(!isChangingPassword);
+                if (isChangingPassword) { 
+                  setErrors({}); 
+                  setPasswordData({ currentPassword: '', newPassword: '', confirmPassword: ''}); 
+                }
+              }}
             >
               {isChangingPassword ? 'Отмена' : 'Изменить'}
             </button>
           </div>
 
           {isChangingPassword && (
-            <form onSubmit={handleSubmit} className="password-form">
+            <form onSubmit={handleSubmit} className="password-form" noValidate>
               <div className="form-group">
-                <label>Текущий пароль</label>
+                <label htmlFor="currentPassword">Текущий пароль</label>
                 <input
                   type="password"
+                  id="currentPassword"
                   name="currentPassword"
                   value={passwordData.currentPassword}
                   onChange={handlePasswordChange}
@@ -87,9 +102,10 @@ const Security = () => {
               </div>
 
               <div className="form-group">
-                <label>Новый пароль</label>
+                <label htmlFor="newPassword">Новый пароль</label>
                 <input
                   type="password"
+                  id="newPassword"
                   name="newPassword"
                   value={passwordData.newPassword}
                   onChange={handlePasswordChange}
@@ -101,9 +117,10 @@ const Security = () => {
               </div>
 
               <div className="form-group">
-                <label>Подтвердите новый пароль</label>
+                <label htmlFor="confirmPassword">Подтвердите новый пароль</label>
                 <input
                   type="password"
+                  id="confirmPassword"
                   name="confirmPassword"
                   value={passwordData.confirmPassword}
                   onChange={handlePasswordChange}
@@ -120,6 +137,9 @@ const Security = () => {
             </form>
           )}
         </div>
+        {
+
+        }
       </div>
     </div>
   );
