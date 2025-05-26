@@ -10,20 +10,55 @@ import './ProfilePage.css';
 
 const ProfilePage = () => {
   const [activeTab, setActiveTab] = useState('personal');
+  const [currentUser, setCurrentUser] = useState(null);
   const navigate = useNavigate();
-  
-  // Check if user is authenticated
-  useEffect(() => {
-    const user = localStorage.getItem('user');
-    if (!user) {
+
+  const loadUserFromStorage = () => {
+    const userString = localStorage.getItem('user');
+    if (!userString) {
       navigate('/login');
+      return null;
     }
-  }, [navigate]);
+    try {
+      const userDataFromStorage = JSON.parse(userString);
+      console.log("ProfilePage (loadUserFromStorage): Данные из localStorage:", userDataFromStorage);
+      return {
+        uid: userDataFromStorage.uid,
+        name: userDataFromStorage.name || '',
+        email: userDataFromStorage.email || '',
+        profession: userDataFromStorage.profession || '',
+        phone: userDataFromStorage.phone || '',
+        location: userDataFromStorage.location || '',
+      };
+    } catch (error) {
+      console.error("ProfilePage: Failed to parse user data from localStorage", error);
+      localStorage.removeItem('user');
+      navigate('/login');
+      return null; 
+    }
+  };
+  
+  useEffect(() => {
+    const loadedUser = loadUserFromStorage();
+    if (loadedUser) {
+        setCurrentUser(loadedUser);
+    }
+
+  }, []); 
+
+  const handleProfileUpdate = (updatedUserData) => {
+    console.log("ProfilePage (handleProfileUpdate): Получены обновленные данные:", updatedUserData);
+    setCurrentUser(updatedUserData); 
+  };
+
 
   const renderContent = () => {
+    if (!currentUser && activeTab === 'personal') {
+      return <p style={{ textAlign: 'center', padding: '20px' }}>Загрузка данных профиля...</p>;
+    }
     switch (activeTab) {
       case 'personal':
-        return <PersonalData />;
+        return <PersonalData initialData={currentUser} onProfileUpdate={handleProfileUpdate} />;
       case 'security':
         return <Security />;
       case 'history':
@@ -31,13 +66,14 @@ const ProfilePage = () => {
       case 'settings':
         return <Settings />;
       default:
-        return <PersonalData />;
+        return <PersonalData initialData={currentUser} onProfileUpdate={handleProfileUpdate} />;
     }
   };
 
   return (
     <div className="profile-page">
-      <Header />
+      {/* ... остальной JSX ... */}
+       <Header />
       <main className="profile-main">
         <div className="profile-container">
           <h1 className="profile-title">Личный кабинет</h1>
