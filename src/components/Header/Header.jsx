@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Link, useLocation } from 'react-router-dom';
 import { signOut } from "firebase/auth";
-import { auth } from "../../firebase.jsx"; 
+import { auth } from "../../firebase"; 
 import './Header.css';
 
 const Header = () => {
@@ -9,69 +9,87 @@ const Header = () => {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const navigate = useNavigate();
+  const location = useLocation(); 
 
   useEffect(() => {
     const handleScroll = () => setIsScrolled(window.scrollY > 10);
     window.addEventListener('scroll', handleScroll);
 
-    const user = localStorage.getItem('user');
-    setIsLoggedIn(!!user);
+    const checkLoginStatus = () => {
+      const user = localStorage.getItem('user');
+      setIsLoggedIn(!!user);
+    };
+    checkLoginStatus();
 
-    return () => window.removeEventListener('scroll', handleScroll);
+    window.addEventListener('storage', checkLoginStatus);
+
+    return () => {
+      window.removeEventListener('scroll', handleScroll);
+      window.removeEventListener('storage', checkLoginStatus);
+    };
   }, []);
+
+  useEffect(() => {
+    setIsMobileMenuOpen(false);
+  }, [location]);
 
   const toggleMobileMenu = () => setIsMobileMenuOpen(!isMobileMenuOpen);
 
-const handleLogout = async () => {
-  try {
-    await signOut(auth);
-    localStorage.removeItem('user');
-    navigate('/'); 
-    console.log("Пользователь вышел, localStorage очищен.");
-  } catch (error) {
-    console.error("Ошибка при выходе:", error);
-  }
-};
+  const handleLogout = async () => {
+    try {
+      await signOut(auth);
+      localStorage.removeItem('user');
+      setIsLoggedIn(false); 
+      setIsMobileMenuOpen(false);
+      navigate('/'); 
+      console.log("Пользователь вышел, localStorage очищен.");
+    } catch (error) {
+      console.error("Ошибка при выходе:", error);
+    }
+  };
+
+  const navLinks = [
+    { path: "/", label: "Главная", icon: null },
+    { path: "/calculator", label: "Калькулятор", icon: "/assets/icons/calculatorshapka.svg", iconClass: "calcshapkaicon" },
+    { path: "/professions", label: "Профессии", icon: "/assets/icons/chemodanshapka.svg", iconClass: "profshapkaicon" },
+    { path: "/contacts", label: "Контакты", icon: "/assets/icons/phoneshapka.svg", iconClass: "kontshapkaicon" },
+    { path: "/about", label: "О нас", icon: "/assets/icons/infoshapka.svg", iconClass: "infoshapkaicon" },
+  ];
 
   return (
     <nav className={`header ${isScrolled ? 'header-scrolled' : ''}`}>
       <div className="header-container">
-        <a href="/" className="header-logo">Calcora</a>
+        <Link to="/" className="header-logo">Calcora</Link>
 
-        <button className="mobile-menu-button" onClick={toggleMobileMenu} aria-label="Открыть меню">
-          <span></span><span></span><span></span>
+        <button className="mobile-menu-button" onClick={toggleMobileMenu} aria-expanded={isMobileMenuOpen} aria-label="Открыть меню">
+          <span style={isMobileMenuOpen ? {transform: 'rotate(45deg) translate(5px, 5px)'} : {}}></span>
+          <span style={isMobileMenuOpen ? {opacity: 0} : {}}></span>
+          <span style={isMobileMenuOpen ? {transform: 'rotate(-45deg) translate(5px, -5px)'} : {}}></span>
         </button>
 
         <div className={`header-nav ${isMobileMenuOpen ? 'mobile-open' : ''}`}>
-          <a href="/" className="nav-item nav-item-active"><span>Главная</span></a>
-          <a href="/calculator" className="nav-item">
-            <img className="calcshapkaicon" alt="" src="/assets/icons/calculatorshapka.svg" />
-            <span>Калькулятор</span>
-          </a>
-          <a href="/professions" className="nav-item">
-            <img className="profshapkaicon" alt="" src="/assets/icons/chemodanshapka.svg" />
-            <span>Профессии</span>
-          </a>
-          <a href="/contacts" className="nav-item">
-            <img className="kontshapkaicon" alt="" src="/assets/icons/phoneshapka.svg" />
-            <span>Контакты</span>
-          </a>
-          <a href="/about" className="nav-item">
-            <img className="infoshapkaicon" alt="" src="/assets/icons/infoshapka.svg" />
-            <span>О нас</span>
-          </a>
+          {navLinks.map(link => (
+            <Link 
+              key={link.path} 
+              to={link.path} 
+              className={`nav-item ${location.pathname === link.path ? 'nav-item-active' : ''}`}
+            >
+              {link.icon && <img className={link.iconClass} alt="" src={link.icon} />}
+              <span>{link.label}</span>
+            </Link>
+          ))}
         </div>
 
         <div className="header-auth">
           {isLoggedIn ? (
             <>
-              <a href="/profile" className="login-button">Мой профиль</a>
+              <Link to="/profile" className="login-button">Мой профиль</Link>
               <button onClick={handleLogout} className="register-button">Выйти</button>
             </>
           ) : (
             <>
-              <a href="/login" className="login-button">Войти</a>
-              <a href="/register" className="register-button">Зарегистрироваться</a>
+              <Link to="/login" className="login-button">Войти</Link>
+              <Link to="/register" className="register-button">Зарегистрироваться</Link>
             </>
           )}
         </div>
