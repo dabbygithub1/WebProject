@@ -1,5 +1,7 @@
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { signOut } from "firebase/auth";
+import { auth } from "../../firebase.jsx"; 
 import './Header.css';
 
 const Header = () => {
@@ -20,11 +22,16 @@ const Header = () => {
 
   const toggleMobileMenu = () => setIsMobileMenuOpen(!isMobileMenuOpen);
 
-  const handleLogout = () => {
+const handleLogout = async () => {
+  try {
+    await signOut(auth);
     localStorage.removeItem('user');
-    setIsLoggedIn(false);
-    navigate('/');
-  };
+    navigate('/'); 
+    console.log("Пользователь вышел, localStorage очищен.");
+  } catch (error) {
+    console.error("Ошибка при выходе:", error);
+  }
+};
 
   return (
     <nav className={`header ${isScrolled ? 'header-scrolled' : ''}`}>
