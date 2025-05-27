@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
 import Header from 'C:/SiteProject/calcora/src/components/Header/Header';
 import Footer from 'C:/SiteProject/calcora/src/components/Footer/Footer';
 import './ProfessionsPage.css';
@@ -93,18 +94,14 @@ const professions = [
 const ProfessionsPage = () => {
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedCategory, setSelectedCategory] = useState('Все категории');
-
+  const navigate = useNavigate();
+  
   const filteredProfessions = professions.filter(profession => 
     profession.title.toLowerCase().includes(searchQuery.toLowerCase())
   );
 
-  const handleCalculate = (professionId) => {
-    // Here will be the logic for calculation
-    console.log(`Calculating for profession ${professionId}`);
-  };
-
   const handleSuggestProfession = () => {
-    // Here will be the logic for suggesting a new profession
+
     console.log('Suggesting new profession');
   };
 
@@ -128,7 +125,6 @@ const ProfessionsPage = () => {
               className="search-input"
             />
           </div>
-
           <div className="category-select">
             <select 
               value={selectedCategory}
@@ -153,13 +149,14 @@ const ProfessionsPage = () => {
               <h3 className="profession-title">{profession.title}</h3>
               <p className="profession-salary">{profession.salary}</p>
               <p className="profession-description">{profession.description}</p>
-              <button 
-                className="calculate-button"
-                onClick={() => handleCalculate(profession.id)}
-              >
+              <Link to="/calculator" className="calculate-link-styled">
                 Рассчитать зарплату
-                <img src="/assets/icons/strelkaprofessions.svg" alt="" />
-              </button>
+                <img 
+                  src="/assets/icons/strelkaprofessions.svg" 
+                  alt="->" 
+                  className="calculate-link-arrow" 
+                />
+              </Link>
             </div>
           ))}
         </div>
