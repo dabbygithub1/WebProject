@@ -72,7 +72,6 @@ const ProfilePage = () => {
 
   return (
     <div className="profile-page">
-      {/* ... остальной JSX ... */}
        <Header />
       <main className="profile-main">
         <div className="profile-container">

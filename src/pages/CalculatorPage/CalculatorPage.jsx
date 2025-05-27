@@ -1,5 +1,3 @@
-// C:/ProjectWeb/calcora/src/pages/CalculatorPage/CalculatorPage.jsx
-
 import React from 'react';
 import SalaryCalculator from '../../components/Calculator/SalaryCalculator';
 import Header from 'C:/SiteProject/calcora/src/components/Header/Header';

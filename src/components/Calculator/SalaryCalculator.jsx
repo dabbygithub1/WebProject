@@ -83,7 +83,6 @@ const SalaryCalculator = () => {
       
       <div className="calculator-card">
         <div className="calculator-layout">
-          {/* Form Section */}
           <div className="form-section">
             <div className="form-fields">
               <div className="form-field">
@@ -190,7 +189,6 @@ const SalaryCalculator = () => {
             </div>
           </div>
 
-          {/* Results Section */}
           <div className="results-section">
             {calculations ? (
               <div className="results-content">

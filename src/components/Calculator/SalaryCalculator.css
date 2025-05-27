@@ -42,7 +42,6 @@
   }
 }
 
-/* Form Section Styles */
 .form-section {
   flex: 1;
   padding: 1.5rem;
@@ -248,7 +247,6 @@
   margin-bottom: 1rem;
 }
 
-/* Results Section Styles */
 .results-section {
   flex: 1;
   padding: 1.5rem;
@@ -387,7 +385,6 @@
   }
 }
 
-/* Info Banner */
 .info-banner {
   margin-top: 2rem;
   padding: 1rem;

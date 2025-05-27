@@ -8,14 +8,12 @@ const SickLeaveCalculator = () => {
   const [childDisabled, setChildDisabled] = useState(false);
   const [showTooltip, setShowTooltip] = useState(false);
 
-  // Helper function to return correct word form based on number
   const getYearText = (years) => {
     if (years === 1) return 'год';
     if (years >= 2 && years <= 4) return 'года';
     return 'лет';
   };
 
-  // Render different sick leave information based on selected type
   const renderSickLeaveInfo = () => {
     switch (sickLeaveType) {
       case 'child-care':
