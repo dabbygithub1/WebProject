@@ -6,6 +6,7 @@ import ProfessionsPage from './pages/ProfessionsPage/ProfessionsPage';
 import CalculatorPage from './pages/CalculatorPage/CalculatorPage';
 import ProfilePage from './pages/ProfilePage/ProfilePage';
 import ContactsPage from './pages/ContactsPage/ContactsPage';
+import AboutPage from './pages/AboutPage/AboutPage';
 
 
 import './App.css';
@@ -21,6 +22,7 @@ function App() {
         <Route path="/professions" element={<ProfessionsPage />} />
         <Route path="/calculator" element={<CalculatorPage />} />
         <Route path="/contacts" element={<ContactsPage />} />
+        <Route path="/about" element={<AboutPage />} />
       </Routes>
     </Router>
   );
