@@ -1,70 +1,93 @@
-# Getting Started with Create React App
+Calcora  — Умный калькулятор зарплаты и налогов
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
-## Available Scripts
+  
 
-In the project directory, you can run:
+Calcora — это современный веб-сервис, позволяющий пользователям рассчитать свою зарплату с учётом налогов, больничных и профсоюзных взносов. Проект создан для повышения финансовой грамотности и прозрачности расчётов.
 
-### `npm start`
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+Используемые технологии
+- React — библиотека для создания пользовательского интерфейса
+- React Router — маршрутизация между страницами
+- Firebase:
+  - Authentication — регистрация и вход пользователей
+  - Firestore (опционально) — хранение данных профиля
+- CSS — стилизация и анимации интерфейса
+- Recharts — визуализация налогов в виде диаграмм
+- Lucide React — иконки
 
-### `npm test`
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
 
-### `npm run build`
+Запуск проекта локально
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+>Убедитесь, что у вас установлен Node.js
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+1. Клонируйте репозиторий:
+    ```bash
+   git clone https://github.com/dabbygithub1/WebProject.git
+   cd calcora
+    ```
+2. Установите зависимости:
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+npm install
 
-### `npm run eject`
+3. Cоздайте файл конфигурации Firebase:
+В папке src/ создайте файл firebase.jsx и добавьте туда свою конфигурацию:
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
+import { initializeApp } from 'firebase/app';
+import { getAuth } from 'firebase/auth';
+import { getFirestore } from 'firebase/firestore';
 
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+const firebaseConfig = {
+  apiKey: "YOUR_API_KEY",
+  authDomain: "YOUR_AUTH_DOMAIN",
+  projectId: "YOUR_PROJECT_ID",
+  storageBucket: "YOUR_STORAGE_BUCKET",
+  messagingSenderId: "YOUR_MSG_ID",
+  appId: "YOUR_APP_ID"
+};
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
+const app = initializeApp(firebaseConfig);
+export const auth = getAuth(app);
+export const db = getFirestore(app);
 
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
+4. Запустите проект:
 
-## Learn More
+npm start
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+Откроется http://localhost:3000
 
-To learn React, check out the [React documentation](https://reactjs.org/).
 
-### Code Splitting
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
 
-### Analyzing the Bundle Size
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
+Сайт задеплоен по адресу: calcoranet.netlify.app
 
-### Making a Progressive Web App
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
 
-### Advanced Configuration
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
 
-### Deployment
+Руководство пользователя:
+- / — Главная: описание сервиса, блоки преимуществ, как работает и призыв к действию
+- /login — Вход с помощью Firebase
+- /register — Регистрация нового пользователя
+- /calculator — Калькулятор зарплаты с подробным расчётом налогов и компенсаций
+- /profile — Личный кабинет: редактирование данных, история, безопасность, настройки
+- /professions — Информация по профессиям
+- /contacts — Контакты
+- /about — О проекте
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
 
-### `npm run build` fails to minify
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+
+Особенности проекта:
+- Поддержка расчёта подоходного налога, взносов в ФСЗН и профсоюз
+- Учёт больничных дней с компенсацией (80% и 100%)
+- Визуализация данных в виде круговой диаграммы (Recharts)
+- Интерактивный и адаптивный интерфейс
+- Личный кабинет с вкладками: данные, безопасность, история, настройки
+- Анимации при наведении и адаптация под мобильные устройства
+
+
+
